@@ -1,5 +1,5 @@
-const kPublisherGoogleSearch = "googlesearch";
-const kPublisherChatGPT = "chatgpt";
+const kPublisherGoogleSearch = "Google Search";
+const kPublisherChatGPT = "ChatGPT";
 
 const kMethodUpdateText = "update_text";
 const kMethodSubmit = "submit";

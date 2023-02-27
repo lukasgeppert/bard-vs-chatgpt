@@ -4,10 +4,10 @@
     "version": "1.0",
     "manifest_version": 3,
     "action": {
-        "default_icon": "hello-world.png"
+        "default_icon": "ui/icon.png"
     },
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "scripts/background.js"
     },
     "minimum_chrome_version": "96",
     // TODO - check if these two are not needed.
@@ -18,8 +18,8 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "hello.html",
-                "hello-world.png"
+                "ui/side-by-side.html",
+                "ui/icon.png"
             ],
             // TODO - strict match to the extension itself.
             "matches": [
@@ -30,24 +30,24 @@
     "content_scripts": [
         {
             "js": [
-                "sync-inputs-utils.js",
-                "sync-inputs-google.js"
+                "scripts/sync-inputs-utils.js",
+                "scripts/sync-inputs-google.js"
             ],
             "matches": [
                 "*://*.google.com/*"
             ],
-            "run_at": "document_idle",
+            "run_at": "document_end",
             "all_frames": true
         },
         {
             "js": [
-                "sync-inputs-utils.js",
-                "sync-inputs-openai.js"
+                "scripts/sync-inputs-utils.js",
+                "scripts/sync-inputs-openai.js"
             ],
             "matches": [
                 "*://*.openai.com/*"
             ],
-            "run_at": "document_idle",
+            "run_at": "document_end",
             "all_frames": true
         }
     ],
@@ -62,7 +62,7 @@
             {
                 "id": "allow-frame-embed",
                 "enabled": true,
-                "path": "allow-frame-embed.json"
+                "path": "rules/allow-frame-embed.json"
             }
         ]
     }

@@ -1,5 +1,3 @@
-// import { kPublisherGoogleSearch, kMethodUpdateText, kSubmit, subscribeRuntimeMessages } from "sync-inputs-utils.js";
-
 // Utils
 function getTextArea() {
     var t = Array.from(document.getElementsByName("q")).find(e => e.type == "text");

@@ -1,11 +1,12 @@
-const kPublisherGoogleSearch = "googlesearch";
-const kPublisherChatGPT = "chatgpt";
+// TODO - create somewhere unified for these constants.
+const kPublisherGoogleSearch = "Google Search";
+const kPublisherChatGPT = "ChatGPT";
 
 var pubsub = {}
 
 chrome.action.onClicked.addListener(async (tab) => {
     // chrome.tabs.create({
-    //     url: chrome.runtime.getURL("hello.html")
+    //     url: chrome.runtime.getURL("ui/side-by-side.html")
     // });
 
     // Get the screen dimensions
@@ -43,7 +44,7 @@ chrome.action.onClicked.addListener(async (tab) => {
     pubsub[openai_window_id] = Array.of(google_window_id);
 });
 
-// Register request router.
+// Register eventbus.
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         console.log(request);
