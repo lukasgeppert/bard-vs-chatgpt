@@ -1,5 +1,3 @@
-// import { kPublisherChatGPT, kMethodUpdateText, kSubmit, subscribeRuntimeMessages } from "sync-inputs-utils.js";
-
 // Utils
 function getTextArea() {
     var textareas = document.getElementsByTagName("textarea");
