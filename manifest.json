@@ -1,0 +1,69 @@
+{
+    "name": "Hello Extensions 101",
+    "description": "Base Level Extension",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_icon": "hello-world.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "minimum_chrome_version": "96",
+    // TODO - check if these two are not needed.
+    "host_permissions": [
+        "*://*.google.com/",
+        "*://*.openai.com/"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "hello.html",
+                "hello-world.png"
+            ],
+            // TODO - strict match to the extension itself.
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "content_scripts": [
+        {
+            "js": [
+                "sync-inputs-utils.js",
+                "sync-inputs-google.js"
+            ],
+            "matches": [
+                "*://*.google.com/*"
+            ],
+            "run_at": "document_idle",
+            "all_frames": true
+        },
+        {
+            "js": [
+                "sync-inputs-utils.js",
+                "sync-inputs-openai.js"
+            ],
+            "matches": [
+                "*://*.openai.com/*"
+            ],
+            "run_at": "document_idle",
+            "all_frames": true
+        }
+    ],
+    // Allow frame embed.
+    "permissions": [
+        "tabs",
+        "declarativeNetRequest",
+        "system.display"
+    ],
+    "declarative_net_request": {
+        "rule_resources": [
+            {
+                "id": "allow-frame-embed",
+                "enabled": true,
+                "path": "allow-frame-embed.json"
+            }
+        ]
+    }
+}
