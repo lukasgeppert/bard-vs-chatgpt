@@ -1,20 +1,20 @@
 // Utils
 function getTextArea() {
-    var textareas = document.getElementsByTagName("textarea");
+    const textareas = document.getElementsByTagName("textarea");
     if (textareas.length == 0) {
-        console.warn("Chatgpt inputs not found.");
+        console.warn("ChatGPT inputs not found.");
     } else if (textareas.length > 1) {
-        console.warn("Chatgpt inputs unexpected.");
+        console.warn("ChatGPT inputs unexpected.");
     }
     return textareas[0];
 }
 
 function getSubmitButton() {
-    var polygons = Array.from(document.getElementsByTagName("polygon")).filter(p => p.parentElement.parentElement.type == "submit");
+    const polygons = Array.from(document.getElementsByTagName("polygon")).filter(p => p.parentElement.parentElement.type == "submit");
     if (polygons.length == 0) {
-        console.warn("Chatgpt button not found.");
+        console.warn("ChatGPT button not found.");
     } else if (polygons.length > 1) {
-        console.warn("Chatgpt inputs unexpected.");
+        console.warn("ChatGPT inputs unexpected.");
     }
     return polygons[0].parentElement.parentElement;
 }
@@ -25,11 +25,21 @@ function isSideBarVisible() {
 
 // Methods
 function updateText(text) {
-    getTextArea().value = text;
+    const t = getTextArea();
+    if (!t) {
+        console.warn("ChatGPT failed to update text.");
+        return;
+    }
+    t.value = text;
 }
 
 function submit() {
-    getSubmitButton().click();
+    const b = getSubmitButton();
+    if (!b) {
+        console.warn("ChatGPT failed to submit.");
+        return;
+    }
+    b.click();
 }
 
 function registerRuntimeMessagePublisher() {
