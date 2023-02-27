@@ -1,7 +1,7 @@
 const kPublisherGoogleSearch = "googlesearch";
 const kPublisherChatGPT = "chatgpt";
 
-var tab_id_links = {}
+var pubsub = {}
 
 chrome.action.onClicked.addListener(async (tab) => {
     // chrome.tabs.create({
@@ -39,8 +39,8 @@ chrome.action.onClicked.addListener(async (tab) => {
     });
     var openai_window_id = openai_window.tabs[0].id;
     
-    tab_id_links[google_window_id] = Array.of(openai_window_id);
-    tab_id_links[openai_window_id] = Array.of(google_window_id);
+    pubsub[google_window_id] = Array.of(openai_window_id);
+    pubsub[openai_window_id] = Array.of(google_window_id);
 });
 
 // Register request router.
@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         console.log(request);
         console.log(sender);
-        tab_id_links[sender.tab.id].forEach(tab_id => {
+        pubsub[sender.tab.id].forEach(tab_id => {
             chrome.tabs.sendMessage(tab_id, request);
         });
     }
