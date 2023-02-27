@@ -5,9 +5,25 @@ const kPublisherChatGPT = "ChatGPT";
 var pubsub = {}
 
 chrome.action.onClicked.addListener(async (tab) => {
-    // chrome.tabs.create({
-    //     url: chrome.runtime.getURL("ui/side-by-side.html")
-    // });
+    // TODO - dedup default settings
+    if (!(await chrome.storage.sync.get()).hasOwnProperty("options")) {
+        chrome.storage.sync.set({
+            "options": {
+                leftPanel: kPublisherChatGPT,
+                rightPanel: kPublisherGoogleSearch,
+                compactView: false
+            }
+        });
+    }
+    const savedSettings = (await chrome.storage.sync.get())["options"];
+
+    if (savedSettings.compactView) {
+        const tab = await chrome.tabs.create({
+            url: chrome.runtime.getURL("ui/side-by-side.html") + "?leftPanel=" + savedSettings.leftPanel + "&rightPanel=" + savedSettings.rightPanel
+        });
+        pubsub[tab.id] = Array.of(tab.id);
+        return;
+    }
 
     // Get the screen dimensions
     const screens = await chrome.system.display.getInfo();
@@ -39,7 +55,7 @@ chrome.action.onClicked.addListener(async (tab) => {
         height: windowHeight
     });
     var openai_window_id = openai_window.tabs[0].id;
-    
+
     pubsub[google_window_id] = Array.of(openai_window_id);
     pubsub[openai_window_id] = Array.of(google_window_id);
 });

@@ -9,6 +9,7 @@
     "background": {
         "service_worker": "scripts/background.js"
     },
+    "options_page": "ui/options.html",
     "minimum_chrome_version": "96",
     // TODO - check if these two are not needed.
     "host_permissions": [
@@ -53,9 +54,10 @@
     ],
     // Allow frame embed.
     "permissions": [
-        "tabs",
         "declarativeNetRequest",
-        "system.display"
+        "storage",
+        "system.display",
+        "tabs"
     ],
     "declarative_net_request": {
         "rule_resources": [
