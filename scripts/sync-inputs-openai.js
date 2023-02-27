@@ -19,6 +19,10 @@ function getSubmitButton() {
     return polygons[0].parentElement.parentElement;
 }
 
+function isSideBarVisible() {
+    return Array.from(document.getElementsByTagName("span")).filter(e => e.innerHTML == "Open sidebar").length == 0;
+}
+
 // Methods
 function updateText(text) {
     getTextArea().value = text;
@@ -38,7 +42,7 @@ function registerRuntimeMessagePublisher() {
         });
     });
     t.addEventListener("keydown", function (e) {
-        if (e.key == "Enter") {
+        if (e.key == "Enter" && isSideBarVisible()) {
             chrome.runtime.sendMessage({
                 publisher: kPublisherChatGPT,
                 method: kMethodSubmit
