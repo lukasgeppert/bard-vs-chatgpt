@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Two-Frames Example</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+        }
+
+        iframe {
+            flex: 1;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="display: flex; flex-direction: row;">
+        <iframe id="google-frame" src="https://www.google.com/" style="flex: 1; height: 100vh;"></iframe>
+        <iframe id="openai-frame" src="https://chat.openai.com/chat" style="flex: 1; height: 100vh;"></iframe>
+    </div>
+</body>
+
+</html>
