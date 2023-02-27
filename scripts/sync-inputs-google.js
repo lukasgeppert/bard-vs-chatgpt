@@ -42,28 +42,37 @@ function submit() {
 
 function registerRuntimeMessagePublisher() {
     const q = getTextArea();
-    q.addEventListener("input", function (e) {
-        chrome.runtime.sendMessage({
-            publisher: kPublisherGoogleSearch,
-            method: kMethodUpdateText,
-            text: e.target.value
+    if (q) {
+        q.addEventListener("input", function (e) {
+            chrome.runtime.sendMessage({
+                publisher: kPublisherGoogleSearch,
+                method: kMethodUpdateText,
+                text: e.target.value
+            });
         });
-    });
-    q.addEventListener("keydown", function (e) {
-        if (e.key == "Enter") {
+        q.addEventListener("keydown", function (e) {
+            if (e.key == "Enter") {
+                chrome.runtime.sendMessage({
+                    publisher: kPublisherGoogleSearch,
+                    method: kMethodSubmit
+                });
+            }
+        });
+    } else {
+        console.warn("Google search failed to register runtime events with text areas.");
+    }
+    const buttons = getSearchButtons();
+    if (buttons.length > 0) {
+        getSearchButtons().forEach(button => button.addEventListener("mousedown", function (e) {
             chrome.runtime.sendMessage({
                 publisher: kPublisherGoogleSearch,
                 method: kMethodSubmit
             });
         }
-    });
-    getSearchButtons().forEach(button => button.addEventListener("mousedown", function (e) {
-        chrome.runtime.sendMessage({
-            publisher: kPublisherGoogleSearch,
-            method: kMethodSubmit
-        });
+        ));
+    } else {
+        console.warn("Google search failed to register runtime events with search buttons.");
     }
-    ));
 }
 
 

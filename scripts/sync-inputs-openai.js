@@ -44,27 +44,36 @@ function submit() {
 
 function registerRuntimeMessagePublisher() {
     var t = getTextArea();
-    t.addEventListener("input", function (e) {
-        chrome.runtime.sendMessage({
-            publisher: kPublisherChatGPT,
-            method: kMethodUpdateText,
-            text: e.target.value
+    if (t) {
+        t.addEventListener("input", function (e) {
+            chrome.runtime.sendMessage({
+                publisher: kPublisherChatGPT,
+                method: kMethodUpdateText,
+                text: e.target.value
+            });
         });
-    });
-    t.addEventListener("keydown", function (e) {
-        if (e.key == "Enter" && isSideBarVisible()) {
+        t.addEventListener("keydown", function (e) {
+            if (e.key == "Enter" && isSideBarVisible()) {
+                chrome.runtime.sendMessage({
+                    publisher: kPublisherChatGPT,
+                    method: kMethodSubmit
+                });
+            }
+        });
+    } else {
+        console.warn("ChatGPT failed to register runtime events.");
+    }
+    const button = getSubmitButton();
+    if (button) {
+        button.addEventListener("click", function (e) {
             chrome.runtime.sendMessage({
                 publisher: kPublisherChatGPT,
                 method: kMethodSubmit
             });
-        }
-    });
-    getSubmitButton().addEventListener("click", function (e) {
-        chrome.runtime.sendMessage({
-            publisher: kPublisherChatGPT,
-            method: kMethodSubmit
         });
-    });
+    } else {
+        console.warn("ChatGPT failed to register runtime events with search buttons.");
+    }
 }
 
 // Register publisher and subscriber.
