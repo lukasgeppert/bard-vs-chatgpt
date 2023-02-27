@@ -14,7 +14,7 @@ async function restoreOptions() {
             "options": {
                 leftPanel: kPublisherChatGPT,
                 rightPanel: kPublisherGoogleSearch,
-                compactView: false
+                compactView: true
             }
         });
     }

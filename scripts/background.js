@@ -21,7 +21,7 @@ chrome.action.onClicked.addListener(async (tab) => {
             "options": {
                 leftPanel: kPublisherChatGPT,
                 rightPanel: kPublisherGoogleSearch,
-                compactView: false
+                compactView: true
             }
         });
     }
