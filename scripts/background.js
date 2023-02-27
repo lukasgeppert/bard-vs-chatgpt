@@ -2,6 +2,16 @@
 const kPublisherGoogleSearch = "Google Search";
 const kPublisherChatGPT = "ChatGPT";
 
+function convertPublisherToSite(publisher) {
+    switch (publisher) {
+        case kPublisherGoogleSearch:
+            return "https://www.google.com/"
+        case kPublisherChatGPT:
+            return "https://chat.openai.com/chat"
+    }
+    console.warn("unknown publisher " + publisher);
+}
+
 var pubsub = {}
 
 chrome.action.onClicked.addListener(async (tab) => {
@@ -37,7 +47,7 @@ chrome.action.onClicked.addListener(async (tab) => {
     const rightWindowLeft = windowWidth;
 
     var google_window = await chrome.windows.create({
-        url: "https://www.google.com",
+        url: convertPublisherToSite(savedSettings.leftPanel),
         type: 'normal',
         left: leftWindowLeft,
         top: 0,
@@ -47,7 +57,7 @@ chrome.action.onClicked.addListener(async (tab) => {
     var google_window_id = google_window.tabs[0].id;
 
     var openai_window = await chrome.windows.create({
-        url: "https://chat.openai.com/chat",
+        url: convertPublisherToSite(savedSettings.rightPanel),
         type: 'normal',
         left: rightWindowLeft,
         top: 0,
@@ -63,8 +73,6 @@ chrome.action.onClicked.addListener(async (tab) => {
 // Register eventbus.
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-        console.log(request);
-        console.log(sender);
         pubsub[sender.tab.id].forEach(tab_id => {
             chrome.tabs.sendMessage(tab_id, request);
         });

@@ -36,6 +36,14 @@
         {
           "header": "frame-options",
           "operation": "remove"
+        },
+        {
+          "header": "content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-opener-policy",
+          "operation": "remove"
         }
       ]
     },
