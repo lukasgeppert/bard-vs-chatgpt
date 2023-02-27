@@ -1,6 +1,6 @@
 // Utils
 function getTextArea() {
-    var t = Array.from(document.getElementsByName("q")).find(e => e.type == "text");
+    const t = Array.from(document.getElementsByName("q")).find(e => e.type == "text");
     if (!t) {
         console.warn("Google search inputs not found.");
     }
@@ -8,8 +8,13 @@ function getTextArea() {
 }
 
 function getSearchButtons() {
-    var buttons = Array.from(document.getElementsByTagName("input")).filter(b => b.ariaLabel == "Google Search" && b.role == "button");
-    buttons = buttons.concat(Array.from(document.getElementsByTagName("button")).filter(b => b.ariaLabel == "Search"));
+    const buttons = Array.from(
+        document.getElementsByTagName("input"))
+        .filter(b => b.ariaLabel == "Google Search" && b.role == "button")
+        .concat(
+            Array.from(
+                document.getElementsByTagName("button"))
+                .filter(b => b.ariaLabel == "Search"));
     if (buttons.length == 0) {
         console.warn("Google search button not found.");
     }
@@ -18,16 +23,25 @@ function getSearchButtons() {
 
 // Methods
 function updateText(text) {
-    getTextArea().value = text;
+    const q = getTextArea();
+    if (!q) {
+        console.warn("Google search failed to update text.");
+        return;
+    }
+    q.value = text;
 }
 
 function submit() {
-    var buttons = getSearchButtons();
+    const buttons = getSearchButtons();
+    if (buttons.length == 0) {
+        console.warn("Google search failed to submit.");
+        return;
+    }
     buttons[0].click();
 }
 
 function registerRuntimeMessagePublisher() {
-    var q = getTextArea();
+    const q = getTextArea();
     q.addEventListener("input", function (e) {
         chrome.runtime.sendMessage({
             publisher: kPublisherGoogleSearch,
