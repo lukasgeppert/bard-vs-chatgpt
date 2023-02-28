@@ -1,6 +1,7 @@
 // TODO - create somewhere unified for these constants.
 const kPublisherGoogleSearch = "Google Search";
 const kPublisherChatGPT = "ChatGPT";
+const kPublisherBing = "Bing";
 
 async function restoreOptions() {
     const form = document.querySelector('form');

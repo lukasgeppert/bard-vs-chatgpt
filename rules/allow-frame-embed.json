@@ -18,7 +18,6 @@
     "condition": {
       "urlFilter": "*://*.google.com/*",
       "resourceTypes": [
-        "main_frame",
         "sub_frame"
       ]
     }
@@ -50,7 +49,29 @@
     "condition": {
       "urlFilter": "*://*.openai.com/*",
       "resourceTypes": [
-        "main_frame",
+        "sub_frame"
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "x-frame-options",
+          "operation": "remove"
+        },
+        {
+          "header": "frame-options",
+          "operation": "remove"
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "*://*.bing.com/*",
+      "resourceTypes": [
         "sub_frame"
       ]
     }

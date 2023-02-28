@@ -11,10 +11,10 @@
     },
     "options_page": "ui/options.html",
     "minimum_chrome_version": "96",
-    // TODO - check if these two are not needed.
     "host_permissions": [
         "*://*.google.com/",
-        "*://*.openai.com/"
+        "*://*.openai.com/",
+        "*://*.bing.com/"
     ],
     "web_accessible_resources": [
         {
@@ -50,10 +50,22 @@
             ],
             "run_at": "document_end",
             "all_frames": true
+        },
+        {
+            "js": [
+                "scripts/sync-inputs-utils.js",
+                "scripts/sync-inputs-bing.js"
+            ],
+            "matches": [
+                "*://*.bing.com/*"
+            ],
+            "run_at": "document_end",
+            "all_frames": true
         }
     ],
     // Allow frame embed.
     "permissions": [
+        "cookies",
         "declarativeNetRequest",
         "storage",
         "system.display",
