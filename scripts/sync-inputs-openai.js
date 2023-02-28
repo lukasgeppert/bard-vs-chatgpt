@@ -43,7 +43,7 @@ function submit() {
 }
 
 function registerRuntimeMessagePublisher() {
-    var t = getTextArea();
+    const t = getTextArea();
     if (t) {
         t.addEventListener("input", function (e) {
             chrome.runtime.sendMessage({
@@ -79,5 +79,21 @@ function registerRuntimeMessagePublisher() {
 // Register publisher and subscriber.
 subscribeRuntimeMessages(kPublisherChatGPT, updateText, submit);
 
-registerRuntimeMessagePublisher();
+document.addEventListener('DOMContentLoaded', registerRuntimeMessagePublisher);
 document.body.addEventListener("click", registerRuntimeMessagePublisher);
+
+
+// Experimental - sync when on focus. This is needed because chatgpt can sometimes clear my inputs.
+function updateTextWhenOnFocus() {
+    if (document.hasFocus()) {
+        const q = getTextArea();
+        if (q) {
+            chrome.runtime.sendMessage({
+                publisher: kPublisherChatGPT,
+                method: kMethodUpdateText,
+                text: q.value
+            });
+        }
+    }
+}
+setInterval(updateTextWhenOnFocus, 10);

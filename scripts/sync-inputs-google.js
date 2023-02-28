@@ -1,10 +1,10 @@
 // Utils
 function getTextArea() {
-    const t = Array.from(document.getElementsByName("q")).find(e => e.type == "text");
-    if (!t) {
+    const q = Array.from(document.getElementsByName("q")).find(e => e.type == "text");
+    if (!q) {
         console.warn("Google search inputs not found.");
     }
-    return t;
+    return q;
 }
 
 function getSearchButtons() {
@@ -74,10 +74,24 @@ function registerRuntimeMessagePublisher() {
         console.warn("Google search failed to register runtime events with search buttons.");
     }
 }
-
-
 // Register publisher and subscriber.
 subscribeRuntimeMessages(kPublisherGoogleSearch, updateText, submit);
 
-registerRuntimeMessagePublisher();
+document.addEventListener('DOMContentLoaded', registerRuntimeMessagePublisher);
 document.body.addEventListener("click", registerRuntimeMessagePublisher);
+
+
+// Experimental - sync when on focus. This is needed because chatgpt can sometimes clear my inputs.
+function updateTextWhenOnFocus() {
+    if (document.hasFocus()) {
+        const q = getTextArea();
+        if (q) {
+            chrome.runtime.sendMessage({
+                publisher: kPublisherGoogleSearch,
+                method: kMethodUpdateText,
+                text: q.value
+            });
+        }
+    }
+}
+setInterval(updateTextWhenOnFocus, 10);
