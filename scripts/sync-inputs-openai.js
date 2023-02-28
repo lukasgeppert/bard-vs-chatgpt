@@ -3,6 +3,7 @@ function getTextArea() {
     const textareas = document.getElementsByTagName("textarea");
     if (textareas.length == 0) {
         console.warn("ChatGPT inputs not found.");
+        return;
     } else if (textareas.length > 1) {
         console.warn("ChatGPT inputs unexpected.");
     }
@@ -13,6 +14,7 @@ function getSubmitButton() {
     const polygons = Array.from(document.getElementsByTagName("polygon")).filter(p => p.parentElement.parentElement.type == "submit");
     if (polygons.length == 0) {
         console.warn("ChatGPT button not found.");
+        return;
     } else if (polygons.length > 1) {
         console.warn("ChatGPT inputs unexpected.");
     }
