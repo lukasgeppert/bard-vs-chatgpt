@@ -2,6 +2,8 @@
 const kPublisherGoogleSearch = "Google Search";
 const kPublisherChatGPT = "ChatGPT";
 
+var pubsub = {};
+
 function convertPublisherToSite(publisher) {
     switch (publisher) {
         case kPublisherGoogleSearch:
@@ -11,8 +13,6 @@ function convertPublisherToSite(publisher) {
     }
     console.warn("unknown publisher " + publisher);
 }
-
-var pubsub = {}
 
 chrome.action.onClicked.addListener(async (tab) => {
     // TODO - dedup default settings
@@ -46,7 +46,7 @@ chrome.action.onClicked.addListener(async (tab) => {
     const leftWindowLeft = 0;
     const rightWindowLeft = windowWidth;
 
-    var google_window = await chrome.windows.create({
+    const google_window = await chrome.windows.create({
         url: convertPublisherToSite(savedSettings.leftPanel),
         type: 'normal',
         left: leftWindowLeft,
@@ -54,9 +54,9 @@ chrome.action.onClicked.addListener(async (tab) => {
         width: windowWidth,
         height: windowHeight
     });
-    var google_window_id = google_window.tabs[0].id;
+    const google_window_id = google_window.tabs[0].id;
 
-    var openai_window = await chrome.windows.create({
+    const openai_window = await chrome.windows.create({
         url: convertPublisherToSite(savedSettings.rightPanel),
         type: 'normal',
         left: rightWindowLeft,
@@ -64,7 +64,7 @@ chrome.action.onClicked.addListener(async (tab) => {
         width: windowWidth,
         height: windowHeight
     });
-    var openai_window_id = openai_window.tabs[0].id;
+    const openai_window_id = openai_window.tabs[0].id;
 
     pubsub[google_window_id] = Array.of(openai_window_id);
     pubsub[openai_window_id] = Array.of(google_window_id);
@@ -72,9 +72,14 @@ chrome.action.onClicked.addListener(async (tab) => {
 
 // Register eventbus.
 chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        pubsub[sender.tab.id].forEach(tab_id => {
-            chrome.tabs.sendMessage(tab_id, request);
-        });
+    async function (request, sender, sendResponse) {
+        if (pubsub.hasOwnProperty(sender.tab.id)) {
+            pubsub[sender.tab.id].forEach(tab_id => {
+                chrome.tabs.sendMessage(tab_id, request);
+            });
+            return;
+        }
+        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+        chrome.tabs.sendMessage(tab.id, request);
     }
 );
