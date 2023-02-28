@@ -1,6 +1,6 @@
 {
-    "name": "Hello Extensions 101",
-    "description": "Base Level Extension",
+    "name": "ChatGPT vs Bard",
+    "description": "Put ChatGPT vs Bard side by side for comparison.",
     "version": "1.0",
     "manifest_version": 3,
     "action": {
