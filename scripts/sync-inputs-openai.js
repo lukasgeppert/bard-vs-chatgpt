@@ -1,35 +1,52 @@
 // Utils
 function getTextArea() {
-    const textareas = document.getElementsByTagName("textarea");
-    if (textareas.length == 0) {
-        console.warn("ChatGPT inputs not found.");
+    const textareas = document.querySelector('textarea');
+    if (!textareas) {
+        console.warn('ChatGPT inputs not found.');
         return;
-    } else if (textareas.length > 1) {
-        console.warn("ChatGPT inputs unexpected.");
     }
-    return textareas[0];
+    return textareas;
 }
 
 function getSubmitButton() {
-    const polygons = Array.from(document.getElementsByTagName("polygon")).filter(p => p.parentElement.parentElement.type == "submit");
-    if (polygons.length == 0) {
-        console.warn("ChatGPT button not found.");
+    const button = document.querySelector('button:has(svg line + polygon)')
+    if (!button) {
+        console.warn('ChatGPT button not found.');
         return;
-    } else if (polygons.length > 1) {
-        console.warn("ChatGPT inputs unexpected.");
     }
-    return polygons[0].parentElement.parentElement;
+    return button
 }
 
 function isSideBarVisible() {
-    return Array.from(document.getElementsByTagName("span")).filter(e => e.innerHTML == "Open sidebar").length == 0;
+    return document.querySelectorAll('button:has(span + svg line + line + line)').length == 0;
+}
+
+function sendUpdateText(e) {
+    chrome.runtime.sendMessage({
+        publisher: kPublisherChatGPT,
+        method: kMethodUpdateText,
+        text: e.target.value
+    });
+}
+
+function sendSubmit() {
+    chrome.runtime.sendMessage({
+        publisher: kPublisherChatGPT,
+        method: kMethodSubmit
+    });
+}
+
+function sendEnterSubmit(e) {
+    if (e.key == 'Enter' && isSideBarVisible()) {
+        sendSubmit()
+    }
 }
 
 // Methods
 function updateText(text) {
     const t = getTextArea();
     if (!t) {
-        console.warn("ChatGPT failed to update text.");
+        console.warn('ChatGPT failed to update text.');
         return;
     }
     t.value = text;
@@ -38,7 +55,7 @@ function updateText(text) {
 function submit() {
     const b = getSubmitButton();
     if (!b) {
-        console.warn("ChatGPT failed to submit.");
+        console.warn('ChatGPT failed to submit.');
         return;
     }
     b.click();
@@ -47,34 +64,16 @@ function submit() {
 function registerRuntimeMessagePublisher() {
     const t = getTextArea();
     if (t) {
-        t.addEventListener("input", function (e) {
-            chrome.runtime.sendMessage({
-                publisher: kPublisherChatGPT,
-                method: kMethodUpdateText,
-                text: e.target.value
-            });
-        });
-        t.addEventListener("keydown", function (e) {
-            if (e.key == "Enter" && isSideBarVisible()) {
-                chrome.runtime.sendMessage({
-                    publisher: kPublisherChatGPT,
-                    method: kMethodSubmit
-                });
-            }
-        });
+        t.addEventListener('input', sendUpdateText);
+        t.addEventListener('keydown', sendEnterSubmit);
     } else {
-        console.warn("ChatGPT failed to register runtime events.");
+        console.warn('ChatGPT failed to register runtime events.');
     }
     const button = getSubmitButton();
     if (button) {
-        button.addEventListener("click", function (e) {
-            chrome.runtime.sendMessage({
-                publisher: kPublisherChatGPT,
-                method: kMethodSubmit
-            });
-        });
+        button.addEventListener('mousedown', sendSubmit);
     } else {
-        console.warn("ChatGPT failed to register runtime events with search buttons.");
+        console.warn('ChatGPT failed to register runtime events with search buttons.');
     }
 }
 
@@ -82,7 +81,7 @@ function registerRuntimeMessagePublisher() {
 subscribeRuntimeMessages(kPublisherChatGPT, updateText, submit);
 
 document.addEventListener('DOMContentLoaded', registerRuntimeMessagePublisher);
-document.body.addEventListener("click", registerRuntimeMessagePublisher);
+document.body.addEventListener('click', registerRuntimeMessagePublisher);
 
 
 // Experimental - sync when on focus. This is needed because chatgpt can sometimes clear my inputs.
@@ -99,3 +98,4 @@ function updateTextWhenOnFocus() {
     }
 }
 setInterval(updateTextWhenOnFocus, 10);
+setInterval(registerRuntimeMessagePublisher, 1000);

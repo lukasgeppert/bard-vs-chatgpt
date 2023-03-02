@@ -1,41 +1,57 @@
 // Utils
 function getTextArea() {
-    const t = document.getElementById("sb_form_q");
+    const t = document.querySelector('#sb_form_q');
     if (!t) {
-        console.warn("Bing search inputs not found.");
+        console.warn('Bing search inputs not found.');
     }
     return t;
 }
 
 function getSearchButton() {
-    const button = Array.from(
-        document.getElementsByTagName("svg"))
-        .find(s => s.parentElement.ariaLabel == "Search the web");
-    if (button) {
-        return button;
+    const button = document.querySelector('label[aria-label=\'Search the web\']:has(svg),div#sb_search a div input');
+    if (!button) {
+        console.warn('Bing search button not found.');
+        return;
     }
-    const button_div = document.getElementById("sb_search");
-    if (button_div) {
-        return button_div;
+    return button;
+}
+
+function sendUpdateText(e) {
+    chrome.runtime.sendMessage({
+        publisher: kPublisherBing,
+        method: kMethodUpdateText,
+        text: e.target.value
+    });
+}
+
+function sendSubmit() {
+    chrome.runtime.sendMessage({
+        publisher: kPublisherBing,
+        method: kMethodSubmit
+    });
+}
+
+function sendEnterSubmit(e) {
+    if (e.key == 'Enter') {
+        sendSubmit()
     }
-    console.warn("Bing search button not found.");
-    return;
 }
 
 // Methods
 function updateText(text) {
     const q = getTextArea();
     if (!q) {
-        console.warn("Bing search failed to update text.");
+        console.warn('Bing search failed to update text.');
         return;
     }
     q.value = text;
 }
 
 function submit() {
+    console.log("bing submit");
     const button = getSearchButton();
-    if (buttons.length == 0) {
-        console.warn("Bing search failed to submit.");
+    if (!button) {
+        console.warn('Bing search failed to submit.');
         return;
     }
     button.click();
@@ -44,41 +60,23 @@ function submit() {
 function registerRuntimeMessagePublisher() {
     const q = getTextArea();
     if (q) {
-        q.addEventListener("input", function (e) {
-            chrome.runtime.sendMessage({
-                publisher: kPublisherBing,
-                method: kMethodUpdateText,
-                text: e.target.value
-            });
-        });
-        q.addEventListener("keydown", function (e) {
-            if (e.key == "Enter") {
-                chrome.runtime.sendMessage({
-                    publisher: kPublisherBing,
-                    method: kMethodSubmit
-                });
-            }
-        });
+        q.addEventListener('input', sendUpdateText);
+        q.addEventListener('keydown', sendEnterSubmit);
     } else {
-        console.warn("Bing search failed to register runtime events with text areas.");
+        console.warn('Bing search failed to register runtime events with text areas.');
     }
     const button = getSearchButton();
     if (button) {
-        button.addEventListener("mousedown", function (e) {
-            chrome.runtime.sendMessage({
-                publisher: kPublisherBing,
-                method: kMethodSubmit
-            });
-        });
+        button.addEventListener('mousedown', sendSubmit);
     } else {
-        console.warn("Bing search failed to register runtime events with search buttons.");
+        console.warn('Bing search failed to register runtime events with search .');
     }
 }
 // Register publisher and subscriber.
 subscribeRuntimeMessages(kPublisherBing, updateText, submit);
 
 document.addEventListener('DOMContentLoaded', registerRuntimeMessagePublisher);
-document.body.addEventListener("click", registerRuntimeMessagePublisher);
+document.body.addEventListener('click', registerRuntimeMessagePublisher);
 
 
 // Experimental - sync when on focus. This is needed because chatgpt can sometimes clear my inputs.
@@ -95,3 +93,4 @@ function updateTextWhenOnFocus() {
     }
 }
 setInterval(updateTextWhenOnFocus, 10);
+setInterval(registerRuntimeMessagePublisher, 1000);
