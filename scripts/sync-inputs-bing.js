@@ -92,5 +92,5 @@ function updateTextWhenOnFocus() {
         }
     }
 }
-setInterval(updateTextWhenOnFocus, 10);
+// setInterval(updateTextWhenOnFocus, 10);
 setInterval(registerRuntimeMessagePublisher, 1000);
