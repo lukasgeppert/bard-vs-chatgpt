@@ -2,4 +2,4 @@
 
 # TODO
 1. fix chatgpt cookies access
-2. support bing search
+2. fix search engine auto completion search

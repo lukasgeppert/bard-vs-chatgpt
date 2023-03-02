@@ -1,15 +1,15 @@
-const kPublisherGoogleSearch = "Google Search";
-const kPublisherChatGPT = "ChatGPT";
-const kPublisherBing = "Bing";
+const kPublisherGoogleSearch = 'Google Search';
+const kPublisherChatGPT = 'ChatGPT';
+const kPublisherBing = 'Bing';
 
-const kMethodUpdateText = "update_text";
-const kMethodSubmit = "submit";
+const kMethodUpdateText = 'update_text';
+const kMethodSubmit = 'submit';
 
 function subscribeRuntimeMessages(publisher, update_text_handler, submit_handler) {
     chrome.runtime.onMessage.addListener(
         function (request, _sender, _sendResponse) {
-            console.log(publisher + "/" + JSON.stringify(request));
-            console.log(publisher + " has focus = " + document.hasFocus());
+            console.log(publisher + '/' + JSON.stringify(request));
+            console.log(publisher + ' has focus = ' + document.hasFocus());
             // No need to subscribe messages from its own.
             if (request.publisher == publisher) {
                 return;

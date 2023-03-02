@@ -1,18 +1,18 @@
 // TODO - create somewhere unified for these constants.
-const kPublisherGoogleSearch = "Google Search";
-const kPublisherChatGPT = "ChatGPT";
-const kPublisherBing = "Bing";
+const kPublisherGoogleSearch = 'Google Search';
+const kPublisherChatGPT = 'ChatGPT';
+const kPublisherBing = 'Bing';
 
 function convertPublisherToSite(publisher) {
     switch (publisher) {
         case kPublisherGoogleSearch:
-            return "https://www.google.com/"
+            return 'https://www.google.com/'
         case kPublisherChatGPT:
-            return "https://chat.openai.com/chat"
+            return 'https://chat.openai.com/chat'
         case kPublisherBing:
-            return "https://www.bing.com/"
+            return 'https://www.bing.com/'
     }
-    console.warn("unknown publisher " + publisher);
+    console.warn('unknown publisher ' + publisher);
 }
 
 const urlParams = new URLSearchParams(window.location.search);

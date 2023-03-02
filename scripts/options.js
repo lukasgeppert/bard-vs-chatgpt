@@ -1,7 +1,7 @@
 // TODO - create somewhere unified for these constants.
-const kPublisherGoogleSearch = "Google Search";
-const kPublisherChatGPT = "ChatGPT";
-const kPublisherBing = "Bing";
+const kPublisherGoogleSearch = 'Google Search';
+const kPublisherChatGPT = 'ChatGPT';
+const kPublisherBing = 'Bing';
 
 async function restoreOptions() {
     const form = document.querySelector('form');
@@ -10,9 +10,9 @@ async function restoreOptions() {
     const compactViewCheckbox = form.elements['compact-view'];
 
     // TODO - dedup default settings
-    if (!(await chrome.storage.sync.get()).hasOwnProperty("options")) {
+    if (!(await chrome.storage.sync.get()).hasOwnProperty('options')) {
         chrome.storage.sync.set({
-            "options": {
+            'options': {
                 leftPanel: kPublisherChatGPT,
                 rightPanel: kPublisherGoogleSearch,
                 compactView: true
@@ -20,7 +20,7 @@ async function restoreOptions() {
         });
     }
 
-    const savedSettings = (await chrome.storage.sync.get())["options"];
+    const savedSettings = (await chrome.storage.sync.get())['options'];
     leftPanelSelect.value = savedSettings.leftPanel || 'ChatGPT';
     rightPanelSelect.value = savedSettings.rightPanel || 'Google Search';
     compactViewCheckbox.checked = savedSettings.compactView || false;
@@ -44,7 +44,7 @@ function saveOptions() {
             rightPanel: rightPanelSelect.value,
             compactView: compactViewCheckbox.checked
         };
-        chrome.storage.sync.set({ "options": settings })
+        chrome.storage.sync.set({ 'options': settings })
     });
 }
 
