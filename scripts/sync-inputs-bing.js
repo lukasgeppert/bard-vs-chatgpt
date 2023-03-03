@@ -16,6 +16,10 @@ function getSearchButton() {
     return button;
 }
 
+function getAutoCompletions() {
+    return document.querySelectorAll('ul[aria-label="Suggestions"] li[role="option"]');
+}
+
 function sendUpdateText(e) {
     chrome.runtime.sendMessage({
         publisher: kPublisherBing,
@@ -35,6 +39,19 @@ function sendEnterSubmit(e) {
     if (e.key == 'Enter') {
         sendSubmit()
     }
+}
+
+async function autoCompletionSendUpdateAndSubmit(e) {
+    const span = e.currentTarget.querySelector('div span[class="sa_tm_text"]');
+    if (!span) {
+        console.warn("Bing search failed to detect auto complete text.")
+    }
+    await chrome.runtime.sendMessage({
+        publisher: kPublisherBing,
+        method: kMethodUpdateText,
+        text: span.textContent
+    });
+    sendSubmit();
 }
 
 // Methods
@@ -75,6 +92,8 @@ function registerRuntimeMessagePublisher() {
     } else {
         console.warn('Bing search failed to register runtime events with search .');
     }
+    const auto_completions = getAutoCompletions();
+    auto_completions.forEach(a => a.addEventListener('mousedown', autoCompletionSendUpdateAndSubmit));
 }
 // Register publisher and subscriber.
 subscribeRuntimeMessages(kPublisherBing, updateText, submit);
@@ -96,5 +115,5 @@ function updateTextWhenOnFocus() {
         }
     }
 }
-setInterval(updateTextWhenOnFocus, 10);
+// setInterval(updateTextWhenOnFocus, 10);
 setInterval(registerRuntimeMessagePublisher, 1000);
