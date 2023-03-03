@@ -2,6 +2,7 @@
 function getTextArea() {
     const q = document.querySelector('input[name="q"][type="text"]');
     if (!q) {
+        console.log(document.URL);
         console.warn('Google search inputs not found.');
     }
     return q;
@@ -41,14 +42,14 @@ function sendEnterSubmit(e) {
 }
 
 async function autoCompletionSendUpdateAndSubmit(e) {
-    const span = e.target.querySelector("div div div span");
+    const span = e.currentTarget.querySelector("div div div span");
     if (!span) {
-        console.warn("Google search auto completion text not found.");
+        console.warn("Google search failed to detect auto complete text.")
     }
     await chrome.runtime.sendMessage({
         publisher: kPublisherGoogleSearch,
         method: kMethodUpdateText,
-        text: e.target.value
+        text: span.textContent
     });
     sendSubmit();
 }
