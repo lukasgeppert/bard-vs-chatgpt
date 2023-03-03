@@ -2,6 +2,7 @@
 function getTextArea() {
     const q = document.querySelector('input[name="q"][type="text"]');
     if (!q) {
+        console.log(document.URL);
         console.warn('Google search inputs not found.');
     }
     return q;
@@ -13,6 +14,10 @@ function getSearchButtons() {
         console.warn('Google search button not found.');
     }
     return buttons;
+}
+
+function getAutoCompletions() {
+    return document.querySelectorAll('div[role="presentation"] ul li');
 }
 
 function sendUpdateText(e) {
@@ -34,6 +39,19 @@ function sendEnterSubmit(e) {
     if (e.key == 'Enter') {
         sendSubmit()
     }
+}
+
+async function autoCompletionSendUpdateAndSubmit(e) {
+    const span = e.currentTarget.querySelector("div div div span");
+    if (!span) {
+        console.warn("Google search failed to detect auto complete text.")
+    }
+    await chrome.runtime.sendMessage({
+        publisher: kPublisherGoogleSearch,
+        method: kMethodUpdateText,
+        text: span.textContent
+    });
+    sendSubmit();
 }
 
 // Methods
@@ -69,6 +87,8 @@ function registerRuntimeMessagePublisher() {
     } else {
         console.warn('Google search failed to register runtime events with search buttons.');
     }
+    const auto_completions = getAutoCompletions();
+    auto_completions.forEach(a => a.addEventListener('mousedown', autoCompletionSendUpdateAndSubmit));
 }
 // Register publisher and subscriber.
 subscribeRuntimeMessages(kPublisherGoogleSearch, updateText, submit);

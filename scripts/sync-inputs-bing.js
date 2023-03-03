@@ -50,11 +50,15 @@ function updateText(text) {
 function submit() {
     console.log("bing submit");
     const button = getSearchButton();
+    console.log(button);
     if (!button) {
         console.warn('Bing search failed to submit.');
         return;
     }
     button.click();
+    if (button.parentElement.submit) {
+        button.parentElement.submit();
+    }
 }
 
 function registerRuntimeMessagePublisher() {

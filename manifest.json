@@ -35,7 +35,8 @@
                 "scripts/sync-inputs-google.js"
             ],
             "matches": [
-                "*://*.google.com/*"
+                "*://www.google.com/",
+                "*://www.google.com/search*"
             ],
             "run_at": "document_end",
             "all_frames": true
