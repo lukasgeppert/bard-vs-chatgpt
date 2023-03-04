@@ -83,6 +83,7 @@ function registerRuntimeMessagePublisher() {
     if (q) {
         q.addEventListener('input', sendUpdateText);
         q.addEventListener('keydown', sendEnterSubmit);
+        q.addEventListener('keydown', registerRuntimeMessagePublisher);
     } else {
         console.warn('Bing search failed to register runtime events with text areas.');
     }
@@ -115,5 +116,5 @@ function updateTextWhenOnFocus() {
         }
     }
 }
-// setInterval(updateTextWhenOnFocus, 10);
+setInterval(updateTextWhenOnFocus, 10);
 setInterval(registerRuntimeMessagePublisher, 1000);
