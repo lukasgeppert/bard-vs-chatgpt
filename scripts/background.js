@@ -2,6 +2,7 @@
 const kPublisherGoogleSearch = 'Google Search';
 const kPublisherChatGPT = 'ChatGPT';
 const kPublisherBing = 'Bing';
+const kPublisherBard = 'Bard';
 
 var pubsub = {};
 
@@ -13,6 +14,8 @@ function convertPublisherToSite(publisher) {
             return 'https://chat.openai.com/chat'
         case kPublisherBing:
             return 'https://www.bing.com/'
+        case kPublisherBard:
+            return 'https://bard.google.com/'
     }
     console.warn('unknown publisher ' + publisher);
 }
@@ -22,8 +25,8 @@ chrome.action.onClicked.addListener(async (tab) => {
     if (!(await chrome.storage.sync.get()).hasOwnProperty('options')) {
         chrome.storage.sync.set({
             'options': {
-                leftPanel: kPublisherChatGPT,
-                rightPanel: kPublisherGoogleSearch,
+                leftPanel: kPublisherBard,
+                rightPanel: kPublisherChatGPT,
                 compactView: true
             }
         });

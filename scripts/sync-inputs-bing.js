@@ -42,9 +42,14 @@ function sendEnterSubmit(e) {
 }
 
 async function autoCompletionSendUpdateAndSubmit(e) {
-    const span = e.currentTarget.querySelector('div span[class="sa_tm_text"]');
-    if (!span) {
-        console.warn("Bing search failed to detect auto complete text.")
+    const li = e.currentTarget;
+    var span = li;
+    if (li.classList.contains('pp_tile')) {
+        span = li.querySelector('div[class="pp_title"]');
+    } else if (li.classList.contains('sa_sg')) {
+        span = li.querySelector('div span[class="sa_tm_text"]');
+    } else {
+        console.warn("Bing search failed to detect text in li.");
     }
     await chrome.runtime.sendMessage({
         publisher: kPublisherBing,
@@ -83,6 +88,7 @@ function registerRuntimeMessagePublisher() {
     if (q) {
         q.addEventListener('input', sendUpdateText);
         q.addEventListener('keydown', sendEnterSubmit);
+        q.addEventListener('keydown', registerRuntimeMessagePublisher);
     } else {
         console.warn('Bing search failed to register runtime events with text areas.');
     }
@@ -115,5 +121,5 @@ function updateTextWhenOnFocus() {
         }
     }
 }
-// setInterval(updateTextWhenOnFocus, 10);
+setInterval(updateTextWhenOnFocus, 10);
 setInterval(registerRuntimeMessagePublisher, 1000);
