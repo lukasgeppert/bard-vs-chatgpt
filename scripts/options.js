@@ -2,6 +2,7 @@
 const kPublisherGoogleSearch = 'Google Search';
 const kPublisherChatGPT = 'ChatGPT';
 const kPublisherBing = 'Bing';
+const kPublisherBard = 'Bard';
 
 async function restoreOptions() {
     const form = document.querySelector('form');
@@ -13,16 +14,16 @@ async function restoreOptions() {
     if (!(await chrome.storage.sync.get()).hasOwnProperty('options')) {
         chrome.storage.sync.set({
             'options': {
-                leftPanel: kPublisherChatGPT,
-                rightPanel: kPublisherGoogleSearch,
+                leftPanel: kPublisherBard,
+                rightPanel: kPublisherChatGPT,
                 compactView: true
             }
         });
     }
 
     const savedSettings = (await chrome.storage.sync.get())['options'];
-    leftPanelSelect.value = savedSettings.leftPanel || 'ChatGPT';
-    rightPanelSelect.value = savedSettings.rightPanel || 'Google Search';
+    leftPanelSelect.value = savedSettings.leftPanel || 'Bard';
+    rightPanelSelect.value = savedSettings.rightPanel || 'ChatGPT';
     compactViewCheckbox.checked = savedSettings.compactView || false;
 
     leftPanelSelect.addEventListener('click', saveOptions);

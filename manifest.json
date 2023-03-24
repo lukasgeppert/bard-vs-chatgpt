@@ -44,6 +44,17 @@
         {
             "js": [
                 "scripts/sync-inputs-utils.js",
+                "scripts/sync-inputs-bard.js"
+            ],
+            "matches": [
+                "*://bard.google.com/"
+            ],
+            "run_at": "document_end",
+            "all_frames": true
+        },
+        {
+            "js": [
+                "scripts/sync-inputs-utils.js",
                 "scripts/sync-inputs-openai.js"
             ],
             "matches": [

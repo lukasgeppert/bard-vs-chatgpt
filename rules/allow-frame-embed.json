@@ -4,6 +4,18 @@
     "priority": 1,
     "action": {
       "type": "modifyHeaders",
+      "requestHeaders": [
+        {
+          "header": "sec-fetch-site",
+          "operation": "set",
+          "value": "same-origin"
+        },
+        {
+          "header": "sec-fetch-dest",
+          "operation": "set",
+          "value": "document"
+        }
+      ],
       "responseHeaders": [
         {
           "header": "x-frame-options",
@@ -11,6 +23,14 @@
         },
         {
           "header": "frame-options",
+          "operation": "remove"
+        },
+        {
+          "header": "content-security-policy",
+          "operation": "remove"
+        },
+        {
+          "header": "cross-origin-opener-policy",
           "operation": "remove"
         }
       ]

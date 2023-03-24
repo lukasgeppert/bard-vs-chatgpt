@@ -1,6 +1,7 @@
 const kPublisherGoogleSearch = 'Google Search';
 const kPublisherChatGPT = 'ChatGPT';
 const kPublisherBing = 'Bing';
+const kPublisherBard = 'Bard';
 
 const kMethodUpdateText = 'update_text';
 const kMethodSubmit = 'submit';

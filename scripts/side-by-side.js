@@ -2,6 +2,7 @@
 const kPublisherGoogleSearch = 'Google Search';
 const kPublisherChatGPT = 'ChatGPT';
 const kPublisherBing = 'Bing';
+const kPublisherBard = 'Bard';
 
 function convertPublisherToSite(publisher) {
     switch (publisher) {
@@ -11,6 +12,8 @@ function convertPublisherToSite(publisher) {
             return 'https://chat.openai.com/chat'
         case kPublisherBing:
             return 'https://www.bing.com/'
+        case kPublisherBard:
+            return 'https://bard.google.com/'
     }
     console.warn('unknown publisher ' + publisher);
 }
