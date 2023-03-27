@@ -22,7 +22,6 @@
                 "ui/side-by-side.html",
                 "ui/icon.png"
             ],
-            // TODO - strict match to the extension itself.
             "matches": [
                 "<all_urls>"
             ]
@@ -75,13 +74,10 @@
             "all_frames": true
         }
     ],
-    // Allow frame embed.
     "permissions": [
-        "cookies",
         "declarativeNetRequest",
         "storage",
-        "system.display",
-        "tabs"
+        "system.display"
     ],
     "declarative_net_request": {
         "rule_resources": [
